@@ -1,0 +1,39 @@
+
+* Ara açma programý
+* Baþlangýç adresi $0000-$0001, son adresi $0002-$0003 adresli bellek gözlerinde yazýlý olan bir veri kümesi vardýr
+* Bu veri kümesine, belli bir adresten baþlayarak N adet veri eklenmek istenmektedir. 
+* Verilerin ekleneceði adresin baþlangýcý $0004-$0005 adresli bellek gözlerinde yazýlýdýr.
+* ----------------------------------------------------------------------------------------------------------------------------------
+* Veri kümesinin sonundan baþlayarak, her veri bir alt adrese kaydýrýlarak soru çözülecektir.
+* ----------------------------------------------------------------------------------------------------------------------------------
+*
+* Simgesel olarak adreslerin belirlenmesi
+
+baþ		eþt	$00
+son		eþt	$02
+ara		eþt	$04
+adým		eþt	$06
+
+* Baþlangýç, son ve ara adreslerinin belleðe yazýlýþý
+
+		baþ	$0000
+		ver	$20,$00,$20,$14,$20,$07,$00,$05
+
+* Verilerin $2000 sayýlý bellek gözünden baþlayarak yazýlmasý
+ 
+		baþ	$2000
+		ver	$00,$01,$02,$03,$04,$05,$06,$07,$08,$09,$0a,$0b,$0c,$0d,$0e,$0f,$10,$11,$12,$13,$14
+		
+* Program $1000 sayýlý bellek gözünden baþlayarak yerleþtirilecektir
+
+		baþ	$1000
+
+baþla		yük	sk,<son>	Veri kümesinin son elemanýnýn adresi iþaretçiye yüklendi
+		yük	cd,<adým>	Eklenecek veri sayýsý CD kütük çiftine yüklendi
+devam		yük	a,<sk+0>	sýradaki veri okundu
+		yaz	a,<sk+cd+00>	okunan veri adým kadar ötedeki bellek gözüne yazýldý
+		azt	sk		iþaretçinin deðeri 1 artýrýldý
+		kar	sk,<$0004>	ara adresine kadar öteleme yapýldý mý?
+		dek	bitti		öteleme iþlemi tamamlandý ise BÝTTÝ'ye giti
+		dal	devam		yoksa ötelemey devam et
+bitti		kes

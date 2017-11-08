@@ -1,0 +1,36 @@
+* --------------------------------------
+* Ortalama deðer hesaplama
+* --------------------------------------
+
+* n aded veri içeren bir destedeki sayýlarýn aritmetik ortalamasý hesaplanacaktýr
+* Destenin baþlangýç adresi $0100 dür
+* Destede bulunan son verinin adresi $010F dir.
+* Destede bulunan sayýlarýn toplamý 8-bit içine sýðabilecektir
+* Ortalamanýn tam kýsmý $0200 e yazýlacaktýr
+
+* -------------------------------------------------------------------------------
+
+* Destedeki verilerin belleðe yazýlmasý
+
+		baþ $0100
+		ver $05,$09,$F0,$22,$EA,$C0,$12,$03,$08,$F1,$0A,$0B,$0C,$03,$FE,$01
+
+* Program baþlangýcý $1000 dir
+
+		baþ $1000
+
+Baþla		sil c			eleman sayacý sýfýrlandý
+		sil b			toplam deðeri sýfýrlandý
+		yük sk,$0100		destenin baþlangýç adresi iþaretçiye yüklendi
+geri		top b,<sk+00>+1		sýradaki veri toplama eklendi ve iþaretçinin deðeri 1 artýrýldý
+		art c			eleman sayacýný 1 artýr
+		kar sk,$0110		tüm elemanlar toplama katýldý mý?
+		dee ortalama		katýldýysa ortalama hesapla
+		dal geri		yeni eleman ekle
+
+ortalama	azt c			eleman sayacýný 1 azalt
+		sil a			bölme iþlemi için hazýrlýk
+		böl ab,c		ab/c iþlemini yap. Sonuç AB çiftinde kalan C de
+		yaz b,<$0200>		Sonuç 8 bite sýðacaðýndan B'nin deðerini yazmak yeterlidir.
+		kes
+			

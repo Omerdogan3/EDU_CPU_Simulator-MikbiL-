@@ -1,0 +1,37 @@
+* -----------------------------------------------------------------
+* 4 bitlik iki sayýyý çarpma programý
+* -----------------------------------------------------------------
+
+* Birinci sayý $1000, ikinci sayý $1001 sayýlý bellek gözlerinde bulunmaktadýr.
+* Çarpým sonucu $1002 sayýlý bellek gözüne yazýlacaktýr.
+
+	
+* Örnek olarak iki veri belleðe yazýldý
+
+	baþ $1000
+	ver $6, $7
+
+* Program $0100 sayýlý bellek gözünden baþlayarak yerleþtirilecek
+
+	baþ $0100
+
+baþla	yük d,$04	sayýlarýn bit sayýsý
+	sil e
+	sil c
+	yük a,<$1000>	birinci sayý
+	yaz a,<$1003>	birinci sayýnýn bir kopyasý belleðe yazýldý
+	yük b,<$1001>	ikinci sayý
+
+geri	alt çarpým	
+	azt d		çarpma adým sayýsýný bir azalt
+	deb geri	adým sayýsý bitmediyse devam et
+	yaz c,<$1002>	bittiyse sonucu $1002 sayýlý bellek gözüne yaz
+	kes
+
+çarpým 	sað b		çarpan sayýyý saða ötele
+	dey bitti	elde yoksa sadece ötele 
+       	yük a,<$1003>	elde varsa çarpýlan sayýya ekle
+	top a,c		
+	akt c,a		ara deðeri C de sakla
+bitti	sol <$1003>	ara deðeri ötele
+       	dön

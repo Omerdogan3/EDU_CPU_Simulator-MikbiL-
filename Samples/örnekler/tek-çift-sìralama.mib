@@ -1,0 +1,43 @@
+* -------------------------------------------------------------------------------------------------------------------------------
+* ASIL isimli bir veri kümesinin elemanlarý bir TEK bir ÇÝFT olarak dizilecektir
+* ASIL veri kümesinin baþlangýç adresi $000A-$000B adreslerinden öðrenilecektir.
+* Küme içindeki veriler tümleyen aritmetiðine göre yazýlmýþtýr ve sayýlarý (N) 255’ten azdýr.
+* N sayýsý $000C adresinden öðrenilecektir. 
+* Küme içinde karýþýk olarak, ancak eþit sayýda çift ve tek sayý bulunmaktadýr.
+
+* YENÝ kümenin ilk sayýsý TEK sayý olacaktýr. YENÝ veri kümesinin baþlangýç adresi $000D-$000E bellek gözlerinden öðrenilecektir.
+* -------------------------------------------------------------------------------------------------------------------------------
+
+* örnek veriler
+		baþ $0100
+		ver $06,$07,$09,$0B,$0A,$0E,$01,$08
+
+* Baþlangýç adresleri
+		baþ $000A
+		ver $01,$00,$08,$02,$00
+
+geçici		eþt $0007
+
+		baþ $1000
+
+baþla		yük cd,<$000A>	ASIL veri kümesinin baþlangýç adresi öðrenildi
+		yük sk,<$000D>	YENÝ veri kümesinin baþlangýç adresi öðrenildi. Ayný zamanda TEK(1) in adresi
+		yük b,<$000C>	N sayýsý öðrenildi
+		akt yg,sk		YENÝ veri kümesinin baþlangýç adresi
+		art yg		ÇÝFT(1) in adresi
+
+		azt cd		ASIL dizisinin iþaretçisini 1 azalt (ayarlama için)
+geri		art cd		ASIL dizisinin iþaretçisini 1 artýr		
+		yük a,<cd>		ASIL veri kümesinden sýradaki veri okundu
+		yaz a,<geçici>	verinin bir kopyasý alýndý
+		sað a
+		dev tekler		veri TEK ise tekler'e dallan
+çiftler		yük a,<geçici>	okunmuþ veri geri alýndý
+		yaz a,<yg+00>	veriyi çiftler göstergesinin gösterdiði adrese yaz
+		art yg
+		art yg 		ve iþaretçiyi 2 artýr
+		dal ileri		yeni veri okumaya git
+tekler		yük a,<geçici>	okunmuþ veri geri alýndý
+		yaz a,<sk+00>+2	veriyi tekler göstergesinin gösterdiði adrese yaz ve iþaretçiyi 2 artýr
+ileri		aded b,geri	N'i 1 azalt N=0 olana dek yeni veri okumaya devam et
+		kes

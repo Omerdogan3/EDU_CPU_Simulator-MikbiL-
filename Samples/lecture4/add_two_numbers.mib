@@ -1,0 +1,10 @@
+* Data will be stored beginning at address $0030
+	ORG $0030
+	DAT $1F, $05
+
+* Program will start at address $0010
+	ORG $0010
+START   LDA A, <$0030>
+        ADD A, <$0031>
+        STA A, <$0032>
+	  INT

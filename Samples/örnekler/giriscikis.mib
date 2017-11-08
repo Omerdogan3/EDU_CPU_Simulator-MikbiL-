@@ -1,0 +1,25 @@
+* PÝA ile ilgili önceden tanýmlý etiketler: PÝA, PÝA.A, PÝA.B,
+* ÝSKELE.A, ÝSKELE.B, YÖNLEN.A, YÖNLEN.B, DURDEN.A, DURDEN.B
+
+* Bu program kaç tane düðmenin lojik-1'de olduðunu sayýp
+* saðdan o kadar sayýda LED'i yakýyor.
+
+		BAÞ	$1000
+
+TABLO		VER	$00, $01, $03, $07, $0F, $1F, $3F, $7F, $FF
+
+		BAÞ	$1020
+
+BAÞLA		YAZ	$00, <YÖNLEN.A>	Ýskele-A tamamen alýcý
+		YAZ	$FF, <YÖNLEN.B>	Ýskele-B tamamen verici
+		YÜK	SK, TABLO
+DEVAM		YÜK	A, <ÝSKELE.A>
+		YÜK	B, 8
+		YÜK	CD, 0
+GERÝ		SAÐ	A
+		DEY	ÝLERÝ
+		ART	D
+ÝLERÝ		ADED	B, GERÝ
+		YÜK	A, <SK+CD+0>
+		YAZ	A, <ÝSKELE.B>
+		DAL	DEVAM

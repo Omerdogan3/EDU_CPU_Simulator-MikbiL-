@@ -1,0 +1,59 @@
+* ---------------------------------------------------------------------
+* Bir destedeki verileri iþaretlerine göre iki desteye ayýran program 
+*----------------------------------------------------------------------
+
+* asýl destenin baþlangýç adresi $0100 dür
+* Artý iþaretli sayýlarýn baþlangýç adresi $0200
+* Eksi iþaretli sayýlarýn baþlangýç adresi $0300 olacaktýr.
+* Artý sayýlarýn adedi $0410 ve eksi sayýlarýn adedi $0412 ye yazýlacaktýr
+
+* --------------------------------------------------------------------
+
+* Verilerin belleðe yazýlasý iþlemi
+
+		baþ $100
+		ver $8,$9A,$28,$F3,$00,$E5,$6,$CC,$9,$DD,$12,$7,$C2 
+
+asýl		eþt $400		Asýl destenin iþaretçisinin adresi
+artý 		eþt $402		Artý destenin iþaretçisinin adresi
+eksi		eþt $404		Eksi destenin iþaretçisinin adresi	
+		
+Programýn baþlangýç adresi $1000 olarak seçilmiþtir
+
+		baþ 	$1000
+
+Baþla		yük cd,$100		Asýl destenin baþlangýç adresi iþaretçiye yüklendi
+		yaz cd,<asýl>		Asýl destenin iþaretçisi saklandý	
+		yük cd,$200		Artý destesinin baþlangýç adresi iþaretçiye yüklendi
+		yaz cd,<artý>		Artý destesinin iþaretçisi saklandý	
+		yük cd,$300		Eksi destesinin baþlangýç adresi iþaretçiye yüklendi
+		yaz cd,<eksi>		Eksi destesinin iþaretçisi saklandý	
+		
+		sil c			artý sayýlar için sayaç
+		sil d			eksi sayýlar için sayaç
+
+Geri		yük sk,<asýl>		Asýl destenin iþaretçisi
+		yük a,<sk+00>		Asýl desteden sýradaki veri okundu
+		art sk			Asýl destenin iþaretçisinin deðeri 1 artýrýldý
+		yaz sk,<asýl>		Asýl destenin iþaretçisi saklandý
+		kar sk,$10D		Asýl destesinin tüm verileri sýnandý mý?
+		dee çýkýþ		sýnandý ise programý sonlandýr
+		kar a,00		okunan verinin iþaretini öðren
+		dbe artýya		veri >= 0 ise artýya git
+		art d			Eksi elemanlarýn sayýsýný bir artýr
+		yük sk,<eksi>		Eksi destesinin iþaretçisi yüklendi		
+		yaz a,<sk+00>		Son okunan veri eksi kümesine yazýldý
+		art sk			Eksi destenin iþaretçisinin deðeri 1 artýrýldý
+		yaz sk,<eksi>		Eksi destesinin iþaretçisi saklandý
+		dal geri		Yeni veri okumak için git
+
+Artýya		art c			Artý elemanlarýn sayýsýný bir artýr
+		yük sk,<artý>		Artý destesinin iþaretçisi yüklendi
+		yaz a,<sk+00>		Son okunan veri artý kümesine yazýldý
+		art sk			Artý destenin iþaretçisinin deðeri 1 artýrýldý
+		yaz sk,<artý>		Artý destesinin iþaretçisi saklandý
+		dal geri		Yeni veri okumak için git
+Çýkýþ		yaz c,<$0410>		Artý sayýlarýn adedini yaz
+		yaz d,<$0412>		Eksi sayýlarýn adedini yaz
+		kes
+		

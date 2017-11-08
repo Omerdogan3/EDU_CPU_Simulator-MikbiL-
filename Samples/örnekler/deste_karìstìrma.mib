@@ -1,0 +1,59 @@
+* ----------------------------------------------
+* Deste karıştırma
+* ----------------------------------------------
+
+* Beyaz ve siyad adlı iki deste veri bulunmaktadır. 
+* Beyaz dizinin başlangıç adresi $0100, siyah dizinin başlangıç adresi $0200 dür
+* Sırayla bir beyaz, bir siyah diziden veri alınıp yeni karma desteye eklenecektir
+* Karma destenin başlangıç adresi $0300 olacaktır
+* --------------------------------------------------------------------------------
+
+* Destelerin belleğe yazılması aşaması
+ 
+		baş $100
+		ver $10,$11,$12,$13,$14,$15,$16,$17,$18,$19 
+		baş $200
+		ver $20,$21,$22,$23,$24,$25,$26,$27,$28,$29 
+
+Beyaz		eşt $0400		Beyaz destenin işaretçisinin adresi
+Siyah		eşt $0402		Siyah destenin işaretçisinin adresi
+Karma		eşt $0404		Karma destenin işaretçisinin adresi
+		
+* Program başlangıcı $0500 olarak belirlendi
+
+		baş $500
+
+Başla		yük cd,$0100		Beyaz destenin başlangıç adresi
+		yaz cd,<beyaz>		Beyaz destenin işaretçisi
+		yük cd,$200		Siyah destenin başlangıç adresi
+		yaz cd,<siyah>		Siyah destenin işaretçisi
+		yük cd,$300		Karma destenin başlangıç adresi
+		yaz cd,<karma>		Karma destenin işaretçisi
+		
+
+Geribas		yük sk,<beyaz>		Beyaz destenin işaretçisi SK'ya yüklendi
+		yük a,<sk+00>		Beyaz desteden sıradaki veri okundu
+		yük cd,<karma>		Karma destenin işaretçisi CD'ye yüklendi
+		yaz a,<cd>		Beyaz desteden alınan veri karma desteye yazıldı
+		art sk			Beyaz destenin işaretçisinin değeri 1 artırıldı
+		yaz sk,<beyaz>		Beyaz destenin işaretçisi saklandı
+		art cd			Karma destenin işaretçisinin değeri 1 artırıldı
+		yaz cd,<karma>		Karma destenin işaretçisi saklandı
+		
+
+		yük sk,<siyah>		Siyah destenin işaretçisi SK'ya yüklendi
+		yük a,<sk+00>		Siyah desteden sıradaki veri okundu
+		yük cd,<karma>		Karma destenin işaretçisi CD'ye yüklendi
+		yaz a,<cd>		Siyah desteden alınan veri karma desteye yazıldı
+		art sk			Siyah destenin işaretçisinin değeri 1 artırıldı
+		yaz sk,<siyah>		Siyah destenin işaretçisi saklandı
+		art cd			Karma destenin işaretçisinin değeri 1 artırıldı
+		yaz cd,<karma>		Karma destenin işaretçisi saklandı
+		kar sk,$20A		Siyah destenin tüm verileri aktarıldı mı?
+		dee çık			Aktarıldı ise çıkışa git
+		dal geribas		Değil ise aktarmaya devam et
+
+Çık		kes
+
+
+

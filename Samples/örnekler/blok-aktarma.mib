@@ -1,0 +1,68 @@
+
+*....................................*
+***        Blok Aktarma           ****
+*....................................*
+
+* Baþlangýç adresi $0000-$0001 ve son adresi $0002-$0003 bellek gözlerinde yazýlý olan bir veri kümesi bulunmaktadýr
+* Söz konusu veri kümesi, bellekte bir baþka bölgeye taþýnacaktýr. Taþýnmýþ veri kümesinin baþlangýç adresi (Varýþ Adresi) 
+* Varýþ adresi $0004-$0005 adresli bellek gözlerinde yazýlýdýr
+* ------------------------------------------------------------------------------------------------------------------------
+
+* Veri kümesini taþýmadan önce, Varýþ Adresinin asýl veri kümesinin içinde olup olmadýðýnýn sýnanmasý gerekir.
+* Varýþ adresi asýl veri kümesinin içine düþüyor ise aktarmayý alttan baþlatmak gerekir.
+* Diðer durumlarda üstten aktarmak uygundur.
+
+* ------------------------------------------------------------------------------------------------------------------------
+ 
+* Simgesl adreslerin belirlenmesi
+
+ABaþ		eþt	$0000
+ASon		eþt	$0002
+Varýþ		eþt	$0004
+
+* Baþlangýç, son ve varýþ adreslerinin belleðe yazýlýþý
+
+		baþ	$0000
+		ver	$20,$00,$20,$20,$20,$10
+
+* Verilerin $2000 sayýlý bellek gözünden baþlayarak yazýlmasý
+ 
+		baþ	$2000
+		ver	$00,$01,$02,$03,$04,$05,$06,$07,$08,$09,$0a,$0b,$0c,$0d,$0e,$0f,
+			$10,$11,$12,$13,$14,$02,$03,$04,$05,$0a,$0b,$0c,$0d,$0e,$0f,$0A
+
+* Deðiþkenler için bellekte yer ayýrma iþlemi
+
+varson		yer	2		; varýþ sonu adresi
+
+* Program $1000 sayýlý bellek gözünden baþlayarak yazýlacaktýr.
+
+		Baþ	$1000
+
+Baþla		yük	ab,<varýþ>	varýþ adresi AB akümülatör çiftine yüklendi	
+		çýk	ab,<abaþ>	varýþ adresinden asýl dizinin baþlangýþ adresi çýkarýldý
+		deb	alttan		(varýþ adresi) > Baþ ise aktarmaya alttan baþlanmalýdýr
+		dal	ustten		deðil ise aktarmaya üstten baþlanabilir
+
+* alttan aktarma iþlemi
+
+alttan		yük	ab,<varýþ>	asýl ve hedef veri kümesi arasýndaki uzaklýk hesaplanýyor	
+		çýk	ab,<abaþ>	
+		akt	cd,ab		uzaklýk deðerini CD kütük çiftine yükle
+		yük	sk,<ason>	asýl kümenin iþaretçisini ayarla
+aktar		yük	a,<sk+0>	Asýl veri kümesinden sýradaki veri okunuyor
+		yaz	a,<sk+cd+00>	Okunan veri hedef veri kümesine yazýlýyor
+		azt	sk		Asýl veri kümesinin iþaretçisi 1 azaltýlýyor
+		kar	sk,<abaþ>	Asýl veri kümesinin tüm verileri taþýndý mý?
+		ded	aktar		Taþýnmadýysa aktarmaya devam	
+		dal	bitis		Taþýnmýþ ise Bitiþ'e git
+
+* Üstten aktarma iþlemi 
+
+ustten		yük	sk,<abaþ>	Asýl veri kümesinin ilk bellek gözünün adresi iþaretçiye (SK) yükleniyor
+aktara		yük	a,<sk+0>	Asýl veri kümesinden sýradaki veri okunuyor
+		yaz	a,<sk+cd+00>	Okunan veri hedef veri kümesine yazýlýyor
+		art	sk		asýl veri kümesinin iþaretçisi 1 artýrýlýyor
+		kar	sk,<ason>	Asýl veri kümesinin tüm verileri taþýndý mý?
+		ded	aktara		Taþýnmadýysa aktarmaya devam
+bitis		kes			Taþýnmýþ ise Bitiþ'e git

@@ -1,0 +1,18 @@
+NUM1   EQU   $2000
+* Belirtilen adrese sembolik isim verildi.
+
+
+NUM2   YER   1
+* Derleyici bellekte 1 bytelýk yer ayýrdý.
+* Adresi derleyici belirledi.
+* YER 2 yazýlýrsa, 2 bytelýk yer ayýrýr.
+
+
+START
+     STA  $35, NUM1
+     STA  $46, NUM2
+
+     LDA  A, <NUM1>
+     LDA  B, <NUM2>
+
+     INT

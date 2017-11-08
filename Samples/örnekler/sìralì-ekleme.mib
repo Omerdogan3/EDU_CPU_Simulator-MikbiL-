@@ -1,0 +1,58 @@
+* ------------------------------------------------------------------------------------------------------------------------
+* Bellekte $1000 - $1010 aralýðýnda küçükten büyüðe doðru sýralanmýþ sayýlardan oluþan ASIL adlý bir dizi bulunmaktadýr.
+* Yine bellekte $1020 adresinden baþlayarak beþ sayý bulunmaktadýr. 
+* Sayýlar tümleyen aritmetiðine göre verilmiþtir. 
+* Asýl adlý diziye bu beþ sayý asýl dizinin sýralanýþ özeliðini bozmayacak þekilde eklenecektir. 
+* Ekleme sýrasýnda, sýranýn gerisinde kalan sayýlar birer adým ötelenecektir. 
+* ------------------------------------------------------------------------------------------------------------------------
+
+* Verileri belleðe yazma iþlemi
+		baþ 	$1000
+		ver  	$90, $C0, $DA, $F1, $F8, $01, $12, $22, $25, $33, $44, $55,$5C,$64, $65,$70,$77
+		baþ 	$1020
+		ver 	$CC,$00,$06, $41,$72
+Aralýk	eþt	$1030
+Sonuncu	eþt	$1032
+ek		eþt  	5
+Eksayý	eþt	$1034
+
+* Program $2000 den baþlayacak
+
+		Baþ $2000
+
+Baþla 	yük sk,$1010			asýl destenin son adresi
+		yaz sk,<sonuncu>	asýl destenin deðiþen son adresi
+		yük a,ek		ek sayýlarýn adedi
+		yaz a,<eksayý>		ek sayýlarýn adedinin tutulduðu bellek gözü
+		yük cd, $1020		ek destenin iþaretçisi		
+devam		yük sk, $1000		asýl destenin iþaretçisi
+				
+		yük b, <cd>		ek destenin bir sayý okundu
+yine		yük a, <sk+00>+1	asýl diziden sýradaki sayý okundu
+		kar b,a			ek deste elemaný ile asýl deste elemanýný karþýlaþtýr
+		dek deðiþ		ek destenin elemaný daha küçük ise asýl diziye eklenecek
+		dal yine		deðil ise bir sonraki sayý ile karþýlaþtýrma yapýlacak
+		
+geri		yük b,<cd>
+		yük sk,<aralýk>
+		yaz b,<sk+01>
+		art cd			ek destenin iþaretçisini 1 artýr
+		azt <eksayý>		beþ sayý eklendi mi ?
+		dee bitir		eklendi ise programý sonlandýr
+		dal devam		eklenmediyse devam
+bitir 	kes
+
+ 
+deðiþ		azt sk
+		azt sk
+		yaz sk,<aralýk>		SK'nýn deðerini ARA adresine yaz
+		yük sk, <sonuncu>	asýl dizinin son adresi
+bit		yük a, <sk+00>		en sondaki sayýyý oku
+		yaz a, <sk+01>		bir sonraki bellek gözüne yaz
+		azt sk			iþaretçinin deðerini 1 azalt
+		kar sk,<aralýk>		ara deðerine kadar öteledik mi
+		ded bit			ötelemedik ise ötelemeye devam
+		yük sk, <sonuncu>
+		art sk
+		yük sk, <sonuncu>	Sonuncunun yeni adresi
+		dal geri

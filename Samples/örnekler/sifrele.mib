@@ -1,0 +1,58 @@
+* ---------------------------------------------------------
+* 8 bitlik verileri þifreleyen program
+* ---------------------------------------------------------
+
+* þifrelenecek veriler bir dizi içinde yer almaktadýr.
+* Asýl dizinin baþlangýç adresi $0000-$0001 adresli bellek gözlerinde yazýlýdýr
+* Asýl dizinin son+1 adresi $0002-$0003  adresli bellek gözlerinde yazýlýdýr
+* Þifrelenmiþ dizinin baþlangýç adresi $0004-$0005 adresli bellek gözlerinde yazýlýdýr
+* ----------------------------------------------------------------------------------------
+
+* Þifreleme yöntemi þöyledir: 
+* Ýlk aþamada verinin tek ve çift sýradaki bitleri ayýklanacaktýr.
+* x seçilmiþ biti - seçilmemiþ biti göstermek üzere, çiftler[x-x- x-x-], tekler [-x-x -x-x]  
+* Ardýndan çift sýradaki bitler sola, tek sýradaki veriler saða ötelenecektir
+* Ötelemenin ardýndan iki veri toplanacaktýr
+* Toplam sonunda oluþan verinin ilk dört biti ikinci dört bit ile yer deðiþtirecek
+* Son olarak veri $0007 sayýlý bellek gözünde bulunan parola verisi ile YADA'lanacaktýr.
+* Þifrelenmiþ veriler, þifreli diziye atýlacaktýr.
+
+* ----------------------------------------------------------------------------------------
+
+* Ýlk deðerlerin belleðe yazýlmasý
+
+		baþ $0000
+		ver $01,$00,$01,$09,$01,$20,$00,$25
+
+		baþ $0100
+		ver $45,$52,$45,$4E,$20,$42,$41,$52,$54,$55
+
+* Program baþlangýcý $1000
+
+		baþ	$0005
+
+baþla		yük sk,<$0000>		asýl dizinin iþaretçisini ayarla
+		yük cd,<$0004>		þifreli dizinin iþaretçisini ayarla
+geri		yük a,<sk+00>		asýl dizidenin sýradaki elemaný oku
+		alt þifrele		þifreleme alt programýna git
+		yaz a,<CD>		þifrelenmiþ veriyi, þifreli veriler dizisine yaz
+		art cd			þifreli dizinin iþaretçisini 1 artýr
+		art sk			asýl dizinin iþaretçisini 1 artýr
+		kar sk,<$0002>		tüm veriler þifrelendi mi?
+		dee bitiþ		þifrelenmiþ ise programý sonlandýr
+		dal geri		yeni veri okumaya git
+bitiþ		kes
+
+* Þifreleme altprogramý
+
+Þifrele		akt	b,a		veri yedeklendi		
+		ve 	a,$aa		[1010 1010] çiftleri seçtik
+		akt	b,a		çiftleri yedekledik
+		akt	a,b		yedek veri okundu
+		ve	a,$55		[0101 0101] tekleri seçtik
+		sað	b		çiftleri saða öteledik		
+		sol	a		tekleri sola öteledik
+		veya 	a,b		tek ve çiftleri topladýk
+		dðþ	a		ilk dörtlük ile ikinci dörtlük yer deðiþtirdi
+		yada	a,<$0007>	parola ile YADA'ladýk. Þifreli veri ACCA da
+		dön

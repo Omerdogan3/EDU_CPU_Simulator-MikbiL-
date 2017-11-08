@@ -1,0 +1,23 @@
+* SQUARE ROOT HESAPLAYAN PROGRAM
+
+NUMBER RMB  1
+ROOT RMB 1
+
+START
+   STA 9, <NUMBER>	; Initialize          
+   LDA A, <NUMBER>	; X
+   INC A			; X = X +1
+   LSR A			; X >> means X = X / 2
+   LDA C, 0
+
+DEVAM	
+   CMP A, C
+   BGT DEVAM1
+
+   STA C, <ROOT>
+   INT
+
+DEVAM1
+   SUB A, C			; X = X - R
+   INC C			; R = R + 1			
+   BRA DEVAM

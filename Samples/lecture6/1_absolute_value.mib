@@ -1,0 +1,10 @@
+START
+*     LDA  A, -5	; content $FB (two's complement)
+*     LDA  A, 251	; content $FB 
+*     LDA  A, $FB	; content $FB 
+     LDA  A, %11111011	; content $FB
+
+     BGT  SON	; branch if Negative flag=0
+     NEG  A		; Negate the negative number
+SON  INT
+

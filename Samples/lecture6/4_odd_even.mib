@@ -1,0 +1,19 @@
+NUMBER  RMB  1
+SONUC   RMB  1  
+* Result codes = 1 means odd, 2 means even
+
+    STA  7, <NUMBER>
+    LDA  A, <NUMBER>
+
+    LSR  A	; Logical Shift Right (Get rightmost bit to Carry flag)
+    BNC  EVEN   ; Branch if Not Carry (If carry flag is 0, data is even)
+
+    STA 1, <SONUC>
+    BRA SON
+
+EVEN
+    STA 2, <SONUC>
+
+SON INT
+
+    

@@ -1,0 +1,20 @@
+* 	SQRT
+
+value		eþt	$10
+result 	eþt	$11
+
+
+		Baþ	$10
+		ver	$07
+		Baþ	$1000
+
+Baþla		sil	c
+		yük	a,<value>		x 
+		art	a			X=x+1
+		sað	a			X >>
+loop		çýk	a,c			a=a-r
+		deb	loop1
+		yaz	c,<result>		result
+		kes
+loop1		art	c
+		dal	loop	

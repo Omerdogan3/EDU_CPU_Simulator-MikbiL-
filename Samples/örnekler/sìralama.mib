@@ -1,0 +1,68 @@
+* ---------------------------------------------
+* Sayýlarý Küçükten büyüðe sýralayan program
+* ---------------------------------------------		
+
+* Asýl destenin baþlangýç adresi $1000
+* Asýl destenin son adresi $000A
+* Sýralý destenin baþlangýç adresi $2000
+* -------------------------------------------------------------------------------
+
+* Düzensiz verilerin belleðe yazýlýþý
+
+		Baþ $1000
+		ver $06,$08,$F2,$01,$E4,$07,$40,$C9,$11,$4F,$37
+
+
+geçici		eþt $0010
+
+		baþ $0100
+
+* Ýlk deðerleri belirleme
+
+Baþla		yük sk,$1000
+		yaz sk,<$0000>		Destenin baþlangýç adresi $1000 ve bu deðeri $0000 adresine yazdýk
+		yük sk,$1008
+		yaz sk,<$0002>		Destenin son adresi $1000 ve bu deðeri $0002 adresine yazdýk
+		yük sk,$2000
+		yaz sk,<$0004>		Sýralý destenin baþlangýç adresi $2000 ve bu deðeri $0004 adresine yazdýk
+Yine		alt enk			ENküçük deðeri bulmak için alt programa gidiliyor
+		yük sk,<$0004>		Sýralý dizinin iþaretçisi
+		yaz b,<sk+00>		sýradaki en küçüðü sýralý diziye yazdý
+		art sk			Sýralý dizinin iþaretçisini 1 artýr
+		yaz sk,<$0004>		Sýralý dizinin iþaretçisini sakla
+		yük sk,<$0000>		Asýl destenin baþlangýç adresi
+		yük cd,<$0002>		Kýrpýlmýþ destenin son adresi
+		kar sk,cd		Tüm sayýlar sýralandý mý?
+		ded yine		Sýralanmadýysa devam
+		kes
+
+* --------------------------------------------
+* En Küçüðü bulan altprogram
+* --------------------------------------------
+
+Enk		yük sk,<$0000>		Destenin baþlangýç adresinin bulunduðu adres
+		yük a,<sk+00>		Ýlk veriyi oku
+deðiþ		akt b,a			Bu deðeri ENK'ya aktardýk
+		yaz sk,<geçici>		ENK'nýn bulunduðu sýra adresini sakla
+dallan		art sk			Ýþaretçinin deðerini 1 artýr
+		kar sk,<$0002>		Tüm deste deðerlendirildi mi?
+		dee bitiþ		evet ise bitiþe git
+		yük a,<sk+00>		sýradaki veriyi oku
+		kar a,b			Yeni sayý ENK'dan küçük mü?
+		dek deðiþ		küçük ise yeni küçük budur
+		dal dallan		deðil ise diðerlerini karþýlaþtýr
+
+* ---------------------------------------------------------------
+* ENK sayýsýný desteden çýkar ve diðer sayýlarý bir üste ötele
+* ---------------------------------------------------------------
+
+bitiþ		yük sk,<geçici>		son ENK'nýn dizideki yeri
+bit		yük a,<sk+01>		bir attakini oku
+		yaz a,<sk+00>		bulunduðun satýra yaz
+		art sk			
+		yük cd,<$0002>		son deðerini cd ye al
+		kar sk,cd		sona geldik mi?
+		ded bit
+		azt cd
+		yaz cd,<$0002>		sonun adres deðerini güncelledik
+		dön

@@ -1,0 +1,12 @@
+* Data values saved at adress $0000.
+       DAT 1,2,3,4,0,6,7
+
+START  CLR   A         
+       LDA   B, 7    
+       LDA   SK, $0000 
+DEVAM  ADD   A, <SK+00>
+       INC   SK        
+       DEC   B         
+       BNE   DEVAM      
+       STA   A, $1000  
+       INT

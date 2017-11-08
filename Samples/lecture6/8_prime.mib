@@ -1,0 +1,31 @@
+NUMBER  RMB  1
+HALF    RMB  1
+
+SONUC   RMB  1
+* Result codes : 1 means prime, 2 means not prime
+
+START
+     STA  8, <NUMBER>	; Initialize example number
+     LDA  A, <NUMBER>	
+     LSR  A	   ; A >> means A = A / 2
+     STA  A, <HALF>
+
+     LDA  D, 2		; D register is loop counter
+DEVAM
+     LDA  A, 0
+     LDA  B, <NUMBER>
+     DIV  AB, D		; Remainder is in C register
+     CMP  C, 0		; Check if remainder is zero
+     BEQ  PRIME_DEGIL
+
+     INC  D
+     CMP  D, <HALF>
+     BLT  DEVAM
+     
+     STA 1, <SONUC>	; Prime
+     BRA SON
+
+PRIME_DEGIL
+     STA 2, <SONUC>	; Not prime
+
+SON  INT

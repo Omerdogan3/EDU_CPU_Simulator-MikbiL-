@@ -1,0 +1,60 @@
+
+* ---------------------------------------------------------------------------------------
+* Bir destedeki verileri tek veya çift sayı olmalarına bakarak iki desteye ayıran program 
+*----------------------------------------------------------------------------------------
+
+* asıl destenin başlangıç adresi $0100 dür
+* çift sayıların başlangıç adresi $0200
+* tek  sayıların başlangıç adresi $0300 olacaktır.
+* çift sayıların adedi $0410 ve tek sayıların adedi $0412 ye yazılacaktır
+
+* --------------------------------------------------------------------
+
+* Verilerin belleğe yazılası işlemi
+
+		baş $100
+		ver $8,$9A,$28,$F3,$00,$E5,$6,$CC,$9,$DD,$12,$7,$C2 
+
+asıl		eşt $400		Asıl destenin işaretçisinin adresi
+pçift 		eşt $402		Çift destenin işaretçisinin adresi
+ptek		eşt $404		Tek destenin işaretçisinin adresi	
+		
+* Programın başlangıç adresi $1000 olarak seçilmiştir
+
+		baş 	$1000
+
+Başla		yük cd,$100		Asıl destenin başlangıç adresi işaretçiye yüklendi
+		yaz cd,<asıl>		Asıl destenin işaretçisi saklandı	
+		yük cd,$200		Çift destesinin başlangıç adresi işaretçiye yüklendi
+		yaz cd,<pçift>		Çift destesinin işaretçisi saklandı	
+		yük cd,$300		Tek  destesinin başlangıç adresi işaretçiye yüklendi
+		yaz cd,<ptek>		Tek  destesinin işaretçisi saklandı	
+		
+		sil c			çift sayılar için sayaç
+		sil d			tek  sayılar için sayaç
+
+Geri		yük sk,<asıl>		Asıl destenin işaretçisi
+		yük a,<sk+00>		Asıl desteden sıradaki veri okundu
+		art sk			Asıl destenin işaretçisinin değeri 1 artırıldı
+		yaz sk,<asıl>		Asıl destenin işaretçisi saklandı
+		kar sk,$10D		Asıl destesinin tüm verileri sınandı mı?
+		dee çıkış		sınandı ise programı sonlandır
+		sağ a			okunan verinin işaretini öğren
+		dey çift		verinin en düşük anlamlı biti 0 ise sayı çifttir
+tek		art d			tek elemanların sayısını bir artır
+		yük sk,<ptek>		tek destesinin işaretçisi yüklendi		
+		yaz a,<sk+00>		Son okunan veri tek kümesine yazıldı
+		art sk			Tek destenin işaretçisinin değeri 1 artırıldı
+		yaz sk,<ptek>		Tek destesinin işaretçisi saklandı
+		dal geri		Yeni veri okumak için git
+
+Çift		art c			Çift elemanların sayısını bir artır
+		yük sk,<pçift>		Çift destesinin işaretçisi yüklendi
+		yaz a,<sk+00>		Son okunan veri artı kümesine yazıldı
+		art sk			Çift destenin işaretçisinin değeri 1 artırıldı
+		yaz sk,<pçift>		Çift destesinin işaretçisi saklandı
+		dal geri		Yeni veri okumak için git
+Çıkış		yaz c,<$0410>		Çift sayıların adedini yaz
+		yaz d,<$0412>		Tek  sayıların adedini yaz
+		kes
+		

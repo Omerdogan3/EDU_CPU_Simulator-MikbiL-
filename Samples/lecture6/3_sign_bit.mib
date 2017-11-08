@@ -1,0 +1,15 @@
+START
+*     LDA  A, $5
+     LDA  A, -$5	; content $FB (two's complement)
+
+     BIT  A, %10000000	; Leftmost bit (MSB sign bit) will be seperated.
+
+* Bit Test (1000 0000  AND  0000 0101 for 5  --> Result=0, Zero flag=1) 
+* Bit Test (1000 0000  AND  1111 1011 for -5 --> Result=1, Zero flag=0) 
+
+     BEQ  POZITIF		; branch if Zero flag=1
+     BNE  NEGATIF		; branch if Zero flag=0
+
+POZITIF  NOP
+NEGATIF  NOP
+      INT

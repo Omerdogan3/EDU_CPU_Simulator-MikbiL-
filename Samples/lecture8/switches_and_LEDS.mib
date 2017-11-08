@@ -1,0 +1,10 @@
+* Switches are inputs, LEDs are outputs.
+
+* Conditioning (configuration) of PIA ports
+START	STA  $00, <YÖNLEN.A>	; All bits of Port-A are receiver
+	STA  $FF, <YÖNLEN.B>	; All bits of Port-B are transmitter
+
+* Infinite loop
+LOOP	LDA   A,  <ÝSKELE.A>	; Read from Port-A
+	STA   A,  <ÝSKELE.B>	; Write to Port-B
+	BRA   LOOP

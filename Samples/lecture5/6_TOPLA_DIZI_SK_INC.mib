@@ -1,0 +1,12 @@
+       ORG $2000
+       DAT 1,2,3,4,5,6,7
+
+START  CLR   A         
+       LDA   B, $07    
+       LDA   SK, $2000 
+DEVAM  ADD   A, <SK+00>
+       INC   SK        
+       DEC   B         
+       BNE   DEVAM      
+       STA   A, $3000  
+       INT

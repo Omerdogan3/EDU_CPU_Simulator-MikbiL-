@@ -1,0 +1,14 @@
+START
+*     LDA  A, 0
+*     LDA  A, $5
+     LDA  A, -$5	; content $FB (two's complement)
+
+    BEQ  SIFIR	; branch if Zero flag=1
+    BGT  POZITIF	; branch if Negative flag=0
+    BLT  NEGATIF	; branch if Negative flag=1
+
+SIFIR    NOP
+POZITIF  NOP
+NEGATIF  NOP
+
+  INT

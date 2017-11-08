@@ -1,0 +1,34 @@
+* -----------------------------------------------
+* Bir deste veri içindeki en küçük veriyi bulma
+* -----------------------------------------------
+
+* Veriler $1000 sayýlý bellek gözünden baþlayarak yazýlmýþtýr.
+* en küçük deðer $1100 sayýlý bellek gözüne yazýlacaktýr.
+
+* ------------------------------------------------------------
+
+* veriler bellek gözlerine yazýlýyor
+
+		Baþ $1000
+		ver $12, $8, $2,$6, $15, $22, $1
+
+* Program $2000 sayýlý bellek gözünden baþlayarak yerleþtirilecek
+
+		baþ $2000
+baþla		yük sk,$1000	iþaretçiye, destenin baþlangýç adresi yüklendi
+		yük c,<sk+0>	destenin ilk sýradaki verisi okundu ve enküçük deðer olarak saklandý
+devam		yük b,<sk+1>	destenin bir sonraki verisi okundu 
+		kar b,c		yeni okunan veri, enküçük veri ile karþýlaþtýrýldý
+		dek küçük	yeni veri enküçük olarak bilinen veriden küçük ise deðiþtir
+artýr		art sk		deðil ise iþaretçinin deðerini 1 artýr
+		kar sk,$1006	destenin tüm verileri karþýlaþtýrýldý mý?
+		dee bitti	karþýlaþtýrýldý ise programý sonlandýr
+		dal devam	bitmedi ise karþýlaþtýrmaya devam et
+
+* yeni okunan veri enküçük olandan daha küçük olduðundan, bu veriyi en küçük olarak sakla
+
+küçük		akt c,b		enküçük deðer deðiþtir
+		dal artýr	karþýlaþtýrma iþlemine devam et			
+
+bitti		yaz c,$1100	enküçük deðeri $1100 sayýlý bellek gözüne yaz
+		kes

@@ -1,0 +1,26 @@
+                          ORG   $1000          
+                          DAT   10,20,30,40,50 
+                          DAT   60,70,80,90,100
+                   
+100A  20 06 20 00  START  LDA   YG,$2000       
+100E  20 05 10 00         LDA   SK,$1000       
+1012  00 01 0A            LDA   B, 10            ; LOOP COUNTER
+                   
+1015  81 0B        BACK   BEQ   NEXT           
+1017  00 60 00            LDA   A,<SK+0>       
+101A  70 45               INC   SK             
+101C  55 40               PSH   A              
+101E  51 41               DEC   B              
+1020  80 F3               BRA   BACK           
+                   
+1022  20 05 10 00  NEXT   LDA   SK,$1000       
+1026  00 01 0A            LDA   B, 10          
+                   
+1029  81 0B        LOOP   BEQ   END            
+102B  56 40               PUL   A              
+102D  01 60 00            STA   A,<SK+0>       
+1030  70 45               INC   SK             
+1032  51 41               DEC   B              
+1034  80 F3               BRA   LOOP           
+                   
+1036  C3           END    INT                  

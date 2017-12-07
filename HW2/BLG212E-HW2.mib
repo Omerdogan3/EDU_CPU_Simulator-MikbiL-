@@ -1,0 +1,94 @@
+* Omer DOGAN
+* 150130208
+* BLG212E HW3
+
+START 
+* Data Direction Registers should be configured (conditioning) at the beginning of program. 
+	STA $00, <yönlen.a>	;PORT-A Receiver
+	STA $FF, <yönlen.b>	;PORT-B Receiver
+
+* Initialized 8 bit registers as 0
+
+    LDA A,$00	; I have used A as user selection register				
+	LDA B,$00	; I have used B as user speed selection register
+	LDA C,$00
+		
+* In this program I have used
+* A -> to check left-side user input
+* B -> to check rightmost speed input
+
+MAIN	LDA A,<iskele.a>	; Gets value from <iskele.a>
+	MOV B,A			; Then it coppies A's value to B
+	AND A,$FC			; AND A with %11111100 means -> remove right 2-bits. 
+	CMP A,%10000000		; Compare A with %1000000 if left-most bit selected.
+	BEQ DEFAULT		; IF flag is 1, it branches to DEFAULT walking routine.
+	CMP A,%01000000		; Compare A with %0100000 if 2nd-most bit is selected.
+	BEQ WALK2			; IF flag is 1, it branches to WALK routine
+	CMP A,%00100000		; Compare A with %0010000 if 3rd-most bit is selected
+	BEQ FLASH			; IF flag is 1, it branches to FLASH routine
+	BRA MAIN			; Then checks user input again.
+
+* Default walking subroutine
+DEFAULT
+	LSR C				; Basically shifts right
+	CMP C,$00			; Compare it with 0
+	BNE STORE 			; If flag is not 1 branch STORE
+	LDA C,%10000000		; If LED reaches rightmost spot then loop back
+	JMP STORE			; Jump to STORE
+
+* Two-by-Two Walk
+WALK2 
+	LSR C				; 2 times shifts right
+	LSR C	
+	CMP C,$00			; Then compares it with 0
+	BNE STORE			; If flag is not brach to STORE
+	LDA C,%10000000		; If LED reaches rightmpst spot then loop back
+	JMP STORE 			; Jump to STORE
+
+* Flashing Occurs in this part of the program
+FLASH	
+	STA $FF, <iskele.b>	; Sets all bits to 1 in <iskele.b> Means: all LEDs are ON
+	BSR SPEED			; Branches SPEED subroutine and sets speed value according to user input
+	STA $00, <iskele.b>	; Sets all bits to 0 in <iskele.b> Means: all LEDs are OFF
+	BSR SPEED			; Branches SPEED subroutine and sets speed value according to user input
+	BRA MAIN			; Branch MAIN and check user input again.
+
+* Speed of the LED's are defined according to rightmost 2bits.
+SPEED 
+	AND B,%00000011 	; AND B with %00000011 means -> remove left 6 bits. Only gets right 2 bits
+	CMP B,$00000000		; Then compares it with 0
+	BEQ DEF			; If flag is 1, set default speed
+	CMP B,$00000001		; Then compares it with rightmost 1
+	BEQ SP1			; If flag is 1, set speed level1
+	CMP B,$00000011		; Then compares it with rightmost 11
+	BEQ SP2			; If flag is 1, set speed level2
+	RTS	
+
+* For this program 16-bit register is required.	
+* 16 BIT register is required to store relatively large numbers like 300000
+* In this program, I have used SK as 16 bit register
+
+DEF	LDA SK,300000		; Loads 300000 to 16-bit speed register.
+	BSR WAIT			; DEF subroutine for default speed -> 300000
+	RTS
+SP1	LDA SK,150000		; Loads 150000 to 16-bit speed register.
+	BSR WAIT			; SP1 subroutine for level1 speed -> 150000
+	RTS			
+SP2	LDA SK,70000		; Loads 70000 to 16-bit speed register.
+	BSR WAIT			; SP2 subroutine for level2 speed -> 70000
+	RTS
+	
+* In this program, I have used C 8-bit register to store values in LEDs
+STORE
+	STA C,<iskele.b>	; This part of the program writes C's value to LEDS
+	BSR SPEED			; Then branches to SPEED subroutine and get speed value
+	BRA MAIN			; And checks user input again and again.
+
+* WAIT subroutine
+WAIT
+L1	DEC SK		
+	CMP SK,%00000000	; This subroutine of the program decreases 16-bit register	
+	BNE L1			; And loops until register is 0				
+	RTS				; Which means that larger value of register is longer wait time.
+				
+	INT				; End of the program
